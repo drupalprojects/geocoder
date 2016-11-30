@@ -13,18 +13,25 @@
  * @param string|string[] $plugin_ids
  *   The geocoder plugin id(s) to use.
  * @param string $data
- *   Data to be passed into the handler for geocoding. For example a address string.
- * @param array $options (optional)
- *   Additional options to pass to the handler. Exact key / values to pass depend on the handler.
+ *   Data to be passed into the handler for geocoding.
+ *   For example a address string.
+ * @param array $options
+ *   Additional options to pass to the handler.
+ *   Exact key / values to pass depend on the handler. (Optional)
  *
- * @return \Geocoder\Model\AddressCollection|FALSE
+ * @return mixed
+ *    \Geocoder\Model\AddressCollection|FALSE
  *
  * @example:
- *    geocoder('googlemaps', '1600 Amphitheatre Parkway Mountain View, CA 94043');
+ *    geocoder('googlemaps', '1600 Amphitheatre Parkway Mountain View,
+ *    CA 94043');
  *    geocoder(array('freegeoip', 'googlemaps'), '8.8.8.8');
+ *
+ * @codingStandardsIgnoreStart
  */
 function geocoder($plugin_ids, $data, array $options = array()) {
   if ($value = \Drupal\geocoder\Geocoder::geocode($plugin_ids, $data, $options)) {
+    // @codingStandardsIgnoreEnd
     return $value;
   }
 
@@ -34,7 +41,8 @@ function geocoder($plugin_ids, $data, array $options = array()) {
 /**
  * The reverse Geocoder API call.
  *
- * Given one or more plugin id(s), a latitude and a longitude, reverse geocode the given data.
+ * Given one or more plugin id(s), a latitude and a longitude,
+ * reverse geocode the given data.
  *
  * @param string|string[] $plugin_ids
  *   The geocoder plugin id(s) to use.
@@ -42,16 +50,21 @@ function geocoder($plugin_ids, $data, array $options = array()) {
  *   The latitude.
  * @param string $longitude
  *   The longitude.
- * @param array $options (optional)
- *   Additional options to pass to the handler. Exact key / values to pass depend on the handler.
+ * @param array $options
+ *   Additional options to pass to the handler.
+ *   Exact key / values to pass depend on the handler. (Optional)
  *
- * @return \Geocoder\Model\AddressCollection|FALSE
+ * @return mixed
+ *    \Geocoder\Model\AddressCollection|FALSE
  *
  * @example:
  *    reverse('googlemaps', '37.4224504', '-122.0840859');
+ *
+ * @codingStandardsIgnoreStart
  */
 function reverse($plugin_ids = 'googlemaps', $latitude, $longitude, array $options = array()) {
   if ($value = \Drupal\geocoder\Geocoder::reverse($plugin_ids, $latitude, $longitude, $options)) {
+    // @codingStandardsIgnoreEnd
     return $value;
   }
 
