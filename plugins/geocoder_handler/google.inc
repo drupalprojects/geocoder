@@ -109,7 +109,7 @@ function geocoder_google($address, $options = array()) {
       '@code' => $result->code,
       '@error' => $result->error,
     );
-    $msg = t('HTTP request to google API failed.\nCode: @code\nError: @error', $args);
+    $msg = t("HTTP request to google API failed.\nCode: @code\nError: @error", $args);
     throw new Exception($msg);
   }
 
@@ -119,8 +119,11 @@ function geocoder_google($address, $options = array()) {
     return FALSE;
   }
   elseif ($data->status != 'OK') {
-    $args = array('@status' => $data->status);
-    $msg = t('Google API returned bad status.\nStatus: @status', $args);
+    $args = array(
+      '@status' => $data->status,
+      '@message' => !empty($data->error_message) ? $data->error_message : t('No specific message'),
+    );
+    $msg = t("Google API returned bad status.\nStatus: @status\nMessage: @message", $args);
     throw new Exception($msg);
   }
 
