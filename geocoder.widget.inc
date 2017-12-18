@@ -228,8 +228,8 @@ function geocoder_widget_get_entity_field_value($entity_type, $field_instance, $
   }
   else if ($entity) {
     $wrapper = entity_metadata_wrapper($entity_type, $entity);
-    $field_wrapper = $wrapper->$field_name;
-    $value = $field_wrapper->value();
+    $field_wrapper = $wrapper->value()->$field_name;
+    $value = $field_wrapper[LANGUAGE_NONE];
     $values = array_filter(is_array($value) && isset($value[0]) ? $value : array($value));
     $source_field_values = array_map(function($value) {
       if (is_array($value)) {
