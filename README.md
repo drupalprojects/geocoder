@@ -1,10 +1,10 @@
 # Geocoder 8.x-2.x
 
 This is a complete rewrite of the Geocoder module, based on the
-[Geocoder PHP library](http://geocoder-php.org) - [version 3.x](https://github.com/geocoder-php/Geocoder/tree/3.x)
+[Geocoder PHP library](http://geocoder-php.org) - [version 3.x](https://github.com/geocoder-php/Geocoder/tree/3.x).
 
 # Features
-* Solid API based on [Geocoder PHP library](href="http://geocoder-php.org);
+* Solid API based on [Geocoder PHP library](http://geocoder-php.org);
 * Geocode and Reverse Geocode using one or multiple Geocoder providers (ArcGISOnline, BingMaps, File, GoogleMaps, MapQuest, Nominatim, OpeneStreetMap, etc);
 * Results can be dumped into multiple formats such as WKT, GeoJson, etc ...</li>
 * The Geocoder Provider and Dumper plugins are extendable through a custom module;</li>
