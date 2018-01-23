@@ -10,6 +10,7 @@ use Drupal\geocoder\GeocoderPluginManagerBase;
 use Drupal\geocoder_field\Annotation\GeocoderPreprocessor;
 use Drupal\Core\Field\FieldConfigInterface;
 use Drupal\Core\Entity\ContentEntityInterface;
+use Drupal\Component\Serialization\Json;
 
 /**
  * Provides a plugin manager for geocoder data preprocessors.

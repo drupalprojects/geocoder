@@ -4,7 +4,6 @@ namespace Drupal\geocoder_address\Plugin\Field\FieldFormatter;
 
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\geocoder_field\Plugin\Field\FieldFormatter\GeocodeFormatter;
-use Drupal\Component\Serialization\Json;
 
 /**
  * Plugin implementation of the Geocode formatter.
@@ -26,7 +25,7 @@ class AddressGeocodeFormatter extends GeocodeFormatter {
     $elements = [];
     $dumper = $this->dumperPluginManager->createInstance($this->getSetting('dumper'));
     $provider_plugins = $this->getEnabledProviderPlugins();
-    $geocoder_plugins_options = Json::decode($this->config->get('plugins_options'));
+    $geocoder_plugins_options = (array) $this->config->get('plugins_options');
 
     foreach ($items as $delta => $item) {
       $value = $item->getValue();

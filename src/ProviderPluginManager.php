@@ -6,6 +6,7 @@ use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\geocoder\Annotation\GeocoderProvider;
 use Drupal\Core\Serialization\Yaml;
+use Drupal\Component\Serialization\Json;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\Url;
@@ -77,7 +78,44 @@ class ProviderPluginManager extends GeocoderPluginManagerBase {
     $this->stringTranslation = $string_translation;
     $this->renderer = $renderer;
     $this->link = $link_generator;
+  }
 
+  /**
+   * Return the array of plugins and their settings if any.
+   *
+   * @return array
+   *   A list of plugins with their settings.
+   */
+  public function getPlugins() {
+    $plugins_arguments = $this->config->get('plugins_options');
+
+    // Convert old JSON config.
+    // @TODO: This should be removed before the stable release 8.x-2.0.
+    if (is_string($plugins_arguments) && $json = Json::decode($plugins_arguments)) {
+      // Convert each plugins property in lowercase.
+      $plugins_arguments = array_map(function ($old_plugin_arguments) {
+        return array_combine(
+          array_map(function ($k) {
+            return strtolower($k);
+          }, array_keys($old_plugin_arguments)),
+          $old_plugin_arguments
+        );
+      }, $json);
+    }
+
+    $plugins_arguments = (array) $plugins_arguments;
+
+    $definitions = array_map(function (array $definition) use ($plugins_arguments) {
+      $plugins_arguments += [$definition['id'] => []];
+      $definition += ['name' => $definition['id'], 'arguments' => []];
+      $definition['arguments'] = array_merge((array) $definition['arguments'], (array) $plugins_arguments[$definition['id']]);
+
+      return $definition;
+    }, $this->getDefinitions());
+
+    ksort($definitions);
+
+    return $definitions;
   }
 
   /**
@@ -151,10 +189,12 @@ class ProviderPluginManager extends GeocoderPluginManagerBase {
     }
 
     $plugins = array_map(function ($plugin, $weight) use ($enabled_plugins) {
+      $checked = in_array($plugin['id'], $enabled_plugins);
+
       return array_merge($plugin, [
-        'checked' => in_array($plugin['id'], $enabled_plugins),
-        'weight' => $weight,
-        'settings' => (empty($plugin['settings']) ? (string) $this->t("This plugin don't accept arguments.") : Yaml::encode($plugin['settings'])),
+        'checked' => $checked,
+        'weight' => $checked ? $weight : 0,
+        'arguments' => (empty($plugin['arguments']) ? (string) $this->t("This plugin doesn't accept arguments.") : Yaml::encode($plugin['arguments'])),
       ]);
     }, $plugins, range(0, count($plugins) - 1));
 
@@ -187,16 +227,50 @@ class ProviderPluginManager extends GeocoderPluginManagerBase {
           '#delta' => 20,
           '#attributes' => ['class' => ['plugins-order-weight']],
         ],
-        'settings' => [
+        'arguments' => [
           '#type' => 'html_tag',
           '#tag' => 'pre',
-          '#value' => $plugin['settings'],
+          '#value' => $plugin['arguments'],
         ],
         '#attributes' => ['class' => ['draggable']],
       ];
     }
 
     return $element['plugins'];
+  }
+
+  /**
+   * Eventually converts Plugins Options in Beta1 Json format.
+   *
+   * @param string $plugins_options
+   *   The plugins_options in string format.
+   *
+   * @TODO: This should be removed before the stable release 8.x-2.0.
+   */
+  public function conditionalGetJsonPluginsOptions(&$plugins_options) {
+    if (!empty(Json::decode($plugins_options))) {
+      $plugins_options = $this->arrayLowerKeyCaseRecursive(Json::decode($plugins_options));
+    }
+  }
+
+  /**
+   * Function to lower case keys in a multidimensional array.
+   *
+   * @param array $arr
+   *   The input array.
+   *
+   * @return array
+   *   The return array
+   *
+   * @TODO: This should be removed before the stable release 8.x-2.0.
+   */
+  private function arrayLowerKeyCaseRecursive(array $arr) {
+    return array_map(function ($item) {
+      if (is_array($item)) {
+        $item = $this->arrayLowerKeyCaseRecursive($item);
+      }
+      return $item;
+    }, array_change_key_case($arr));
   }
 
 }

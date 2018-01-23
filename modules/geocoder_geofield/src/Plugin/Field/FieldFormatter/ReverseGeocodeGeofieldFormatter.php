@@ -4,7 +4,6 @@ namespace Drupal\geocoder_geofield\Plugin\Field\FieldFormatter;
 
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\geocoder_field\Plugin\Field\GeocodeFormatterBase;
-use Drupal\Component\Serialization\Json;
 
 /**
  * Plugin implementation of the Geocode formatter.
@@ -26,7 +25,13 @@ class ReverseGeocodeGeofieldFormatter extends GeocodeFormatterBase {
     $elements = [];
     $dumper = $this->dumperPluginManager->createInstance($this->getSetting('dumper'));
     $provider_plugins = $this->getEnabledProviderPlugins();
-    $geocoder_plugins_options = Json::decode($this->config->get('plugins_options'));
+    $geocoder_plugins_options = $this->config->get('plugins_options');
+
+    // Eventually converts Plugins Options in Beta1 Json format.
+    // @TODO: This should be removed before the stable release 8.x-2.0.
+    if (is_string($geocoder_plugins_options)) {
+      $this->providerPluginManager->conditionalGetJsonPluginsOptions($geocoder_plugins_options);
+    }
 
     /** @var \Drupal\geofield\GeoPHP\GeoPHPInterface $geophp */
     $geophp = \Drupal::service('geofield.geophp');

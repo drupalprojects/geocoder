@@ -2,6 +2,7 @@
 
 namespace Drupal\geocoder\Form;
 
+use Drupal\Core\Config\TypedConfigManagerInterface;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
@@ -10,7 +11,6 @@ use Drupal\Core\Utility\LinkGeneratorInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\geocoder\ProviderPluginManager;
 use Drupal\Core\Url;
-use Drupal\Component\Serialization\Json;
 use Drupal\Core\Render\RendererInterface;
 
 /**
@@ -19,7 +19,14 @@ use Drupal\Core\Render\RendererInterface;
 class SettingsForm extends ConfigFormBase {
 
   /**
-   * The Link generator Service.
+   * The typed config service.
+   *
+   * @var \Drupal\Core\Config\TypedConfigManagerInterface
+   */
+  protected $typedConfigManager;
+
+  /**
+   * The Link generator service.
    *
    * @var \Drupal\Core\Utility\LinkGeneratorInterface
    */
@@ -33,7 +40,7 @@ class SettingsForm extends ConfigFormBase {
   protected $languageManager;
 
   /**
-   * The Renderer service property.
+   * The Renderer service.
    *
    * @var \Drupal\Core\Entity\EntityDisplayRepositoryInterface
    */
@@ -47,10 +54,12 @@ class SettingsForm extends ConfigFormBase {
   protected $providerPluginManager;
 
   /**
-   * GeofieldMapSettingsForm constructor.
+   * SettingsForm constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The factory for configuration objects.
+   * @param \Drupal\Core\Config\TypedConfigManagerInterface $typedConfigManager
+   *   The typed config service.
    * @param \Drupal\Core\Utility\LinkGeneratorInterface $link_generator
    *   The Link Generator service.
    * @param \Drupal\Core\Render\RendererInterface $renderer
@@ -62,12 +71,14 @@ class SettingsForm extends ConfigFormBase {
    */
   public function __construct(
     ConfigFactoryInterface $config_factory,
+    TypedConfigManagerInterface $typedConfigManager,
     LinkGeneratorInterface $link_generator,
     RendererInterface $renderer,
     LanguageManagerInterface $language_manager,
     ProviderPluginManager $provider_plugin_manager
   ) {
     parent::__construct($config_factory);
+    $this->typedConfigManager = $typedConfigManager;
     $this->link = $link_generator;
     $this->renderer = $renderer;
     $this->languageManager = $language_manager;
@@ -78,9 +89,9 @@ class SettingsForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
-
     return new static(
       $container->get('config.factory'),
+      $container->get('config.typed'),
       $container->get('link_generator'),
       $container->get('renderer'),
       $container->get('language_manager'),
@@ -98,9 +109,18 @@ class SettingsForm extends ConfigFormBase {
   /**
    * {@inheritdoc}
    */
+  protected function getEditableConfigNames() {
+    return ['geocoder.settings'];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function buildForm(array $form, FormStateInterface $form_state) {
     $config = $this->config('geocoder.settings');
-    $language_id = $this->languageManager->getCurrentLanguage()->getId();
+
+    $geocoder_config_schema = $this->typedConfigManager->getDefinition('geocoder.settings') + ['mapping' => []];
+    $geocoder_config_schema = $geocoder_config_schema['mapping'];
 
     // Attach Geofield Map Library.
     $form['#attached']['library'] = [
@@ -109,8 +129,8 @@ class SettingsForm extends ConfigFormBase {
 
     $form['cache'] = [
       '#type' => 'checkbox',
-      '#title' => $this->t('Should we cache the results?'),
-      '#description' => $this->t('To prevent sending multiple times the same request, you can enable to cache to save temporarly the result of the geocode and reverse geocode in the cache.'),
+      '#title' => $geocoder_config_schema['cache']['label'],
+      '#description' => $geocoder_config_schema['cache']['description'],
       '#default_value' => $config->get('cache'),
     ];
 
@@ -141,48 +161,76 @@ class SettingsForm extends ConfigFormBase {
       ],
     ];
 
-    // Get the set plugins options.
-    $plugins_options = Json::decode($config->get('plugins_options'));
-
     $rows = [];
-    foreach ($this->providerPluginManager->getPluginsAsOptions() as $plugin_id => $plugin_name) {
-      $rows[$plugin_id] = [
+    foreach ($this->providerPluginManager->getPlugins() as $plugin) {
+      $plugin_config_schema = [];
+
+      if ($this->typedConfigManager->hasConfigSchema('geocoder.settings.plugins.' . $plugin['id'])) {
+        $plugin_config_schema = $this->typedConfigManager->getDefinition('geocoder.settings.plugins.' . $plugin['id']);
+        $plugin_config_schema = $plugin_config_schema['mapping'];
+      }
+
+      $rows[$plugin['id']] = [
         'name' => [
-          '#plain_text' => $plugin_name,
+          '#plain_text' => $plugin['name'],
         ],
       ];
 
-      $plugin_definition = $this->providerPluginManager->getDefinition($plugin_id);
-      // Expose an Options Field if the Plugin accepts arguments.
-      if (!empty($plugin_definition['arguments'])) {
-        foreach ($plugin_definition['arguments'] as $option_key => $value) {
-          // If the argument is boolean generate a checkbox field.
-          if (is_bool($value)) {
-            $rows[$plugin_id]['options'][$option_key] = [
-              '#type' => 'checkbox',
-              '#title' => $option_key,
-              '#default_value' => isset($plugins_options[$plugin_id][$option_key]) ? $plugins_options[$plugin_id][$option_key] : $value,
-            ];
-          }
-          // A textfield field otherwise.
-          else {
-            $rows[$plugin_id]['options'][$option_key] = [
-              '#type' => 'textfield',
-              '#size' => 50,
-              '#title' => $option_key,
-              '#default_value' => isset($plugins_options[$plugin_id][$option_key]) ? $plugins_options[$plugin_id][$option_key] : NULL,
-            ];
-          }
+      foreach ($plugin_config_schema as $argument => $argument_type) {
+        $plugin_config_schema[$argument] += [
+          'label' => $plugin['id'],
+          'description' => NULL,
+        ];
+
+        $plugin['arguments'] += [$argument => $plugin['arguments'][$argument]];
+
+        $plugin_config_schema += [
+          $argument => [
+            'label' => $argument,
+            'description' => NULL,
+          ],
+        ];
+
+        switch ($argument_type['type']) {
+          case 'boolean':
+            $type = 'checkbox';
+            break;
+
+          case 'string':
+          case 'color_hex':
+          case 'path':
+          case 'label':
+            $type = 'textfield';
+            break;
+
+          case 'text':
+            $type = 'textarea';
+            break;
+
+          case 'integer':
+            $type = 'number';
+            break;
+
+          default:
+            $type = 'textfield';
         }
+
+        $rows[$plugin['id']]['options'][$argument] = [
+          '#type' => $type,
+          '#title' => $plugin_config_schema[$argument]['label'],
+          '#description' => $plugin_config_schema[$argument]['description'],
+          '#default_value' => $plugin['arguments'][$argument],
+        ];
       }
-      else {
-        $rows[$plugin_id]['options'] = [
+
+      if (empty($rows[$plugin['id']]['options'])) {
+        $rows[$plugin['id']]['options'] = [
           '#type' => 'value',
           '#value' => [],
           'notes' => [
             '#type' => 'html_tag',
             '#tag' => 'div',
-            '#value' => $this->t("This plugin don't accept arguments."),
+            '#value' => $this->t("This plugin doesn't accept arguments."),
             '#attributes' => [
               'class' => [
                 'options-notes',
@@ -191,9 +239,6 @@ class SettingsForm extends ConfigFormBase {
           ],
         ];
       }
-
-      // Customize the Row Plugin Options based on the Plugin Id.
-      $rows[$plugin_id] = $this->pluginRowCustomize($rows[$plugin_id], $plugin_id, $plugins_options);
     }
 
     foreach ($rows as $plugin_id => $row) {
@@ -221,53 +266,10 @@ class SettingsForm extends ConfigFormBase {
     }
 
     $this->config('geocoder.settings')->set('cache', $form_state_values['cache']);
-    $this->config('geocoder.settings')->set('plugins_options', Json::encode($plugins_options));
+    $this->config('geocoder.settings')->set('plugins_options', $plugins_options);
     $this->config('geocoder.settings')->save();
 
     parent::submitForm($form, $form_state);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  protected function getEditableConfigNames() {
-    return ['geocoder.settings'];
-  }
-
-  /**
-   * Eventually Customize the Row Plugin Options based on the Plugin Id.
-   *
-   * @param array $row
-   *   The Row.
-   * @param string $plugin_id
-   *   The Plugin id.
-   * @param array $plugins_options
-   *   The Plugin options array.
-   *
-   * @return array
-   *   The altered row.
-   */
-  private function pluginRowCustomize(array $row, $plugin_id, array $plugins_options) {
-    switch ($plugin_id) {
-      case 'googlemaps':
-        if (empty($plugins_options[$plugin_id]['apiKey'])) {
-          $row['options']['googlemaps_notes'] = [
-            '#type' => 'html_tag',
-            '#tag' => 'div',
-            '#value' => $this->t('@gmap_api_key_link', [
-              '@gmap_api_key_link' => $this->link->generate($this->t('Get a valid Google Maps Api Key'), Url::fromUri('https://developers.google.com/maps/documentation/javascript/get-api-key', [
-                'absolute' => TRUE,
-                'attributes' => ['target' => 'blank'],
-              ])),
-            ]),
-          ];
-        }
-        break;
-
-      default:
-    }
-
-    return $row;
   }
 
 }

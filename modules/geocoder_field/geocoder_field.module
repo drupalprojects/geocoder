@@ -11,7 +11,6 @@ use Drupal\Core\Field\FieldConfigInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Form\FormState;
 use Drupal\Core\Entity\ContentEntityFormInterface;
-use Drupal\Component\Serialization\Json;
 
 /**
  * Implements hook_form_alter().
@@ -129,7 +128,14 @@ function geocoder_field_entity_presave(EntityInterface $entity) {
   $dumper_manager = \Drupal::service('plugin.manager.geocoder.dumper');
 
   $geocoder_config = \Drupal::configFactory()->get('geocoder.settings');
-  $geocoder_plugins_options = Json::decode($geocoder_config->get('plugins_options'));
+  $geocoder_plugins_options = $geocoder_config->get('plugins_options');
+
+  // Eventually converts Plugins Options in Beta1 Json format.
+  // @TODO: This should be removed before the stable release 8.x-2.0.
+  if (is_string($geocoder_plugins_options)) {
+    $provider_plugin_manager = \Drupal::service('plugin.manager.geocoder.provider');
+    $provider_plugin_manager->conditionalGetJsonPluginsOptions($geocoder_plugins_options);
+  }
 
   // Reorder the list of fields to be Geocoded | Reverse Geocoded.
   $order_geocoder_fields = $preprocessor_manager->getOrderedGeocodeFields($entity);
