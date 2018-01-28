@@ -87,8 +87,7 @@ $options = array(
   'bingmaps' => array(), // array of options
 );
 
-$addressCollection = \Drupal::service('geocoder')->geocode($address, $plugins,
-$options);
+$addressCollection = \Drupal::service('geocoder')->geocode($address, $plugins, $options);
 ```
 
 ## Reverse geocode coordinates
@@ -104,8 +103,7 @@ $options = array(
   'bingmaps' => array(), // array of options
 );
 
-$addressCollection = \Drupal::service('geocoder')->reverse($lat, $lon, $plugins,
-$options);
+$addressCollection = \Drupal::service('geocoder')->reverse($lat, $lon, $plugins, $options);
 ```
 
 ## Return format
@@ -125,14 +123,12 @@ $options = array(
   'bingmaps' => array(), // array of options
 );
 
-$addressCollection = \Drupal::service('geocoder')->geocode($address, $plugins,
-$options);
+$addressCollection = \Drupal::service('geocoder')->geocode($address, $plugins, $options);
 $address_array = $addressCollection->first()->toArray();
 
 // You can play a bit more with the API
 
-$addressCollection = \Drupal::service('geocoder')->geocode($address, $plugins,
-$options);
+$addressCollection = \Drupal::service('geocoder')->geocode($address, $plugins, $options);
 $latitude = $addressCollection->first()->getCoordinates()->getLatitude();
 $longitude = $addressCollection->first()->getCoordinates()->getLongitude();
 ```
@@ -147,12 +143,11 @@ Get the list of available Dumper by doing:
 Here's an example on how to use a Dumper:
 
 ```php
-$plugins = array('geonames', 'googlemaps', 'bingmaps');
+$plugins = array('geonames', 'googlemaps', 'bingmaps'); 
 $address = '1600 Amphitheatre Parkway Mountain View, CA 94043';
 
 $addressCollection = \Drupal::service('geocoder')->geocode($address, $plugins);
-$geojson = \Drupal::service('plugin.manager.geocoder.dumper')->createInstance
-('geojson')->dump($addressCollection->first());
+$geojson = \Drupal::service('plugin.manager.geocoder.dumper')->createInstance('geojson')->dump($addressCollection->first());
 ```
 
 There's also a dumper for GeoPHP, here's how to use it:
@@ -162,8 +157,7 @@ $plugins = array('geonames', 'googlemaps', 'bingmaps');
 $address = '1600 Amphitheatre Parkway Mountain View, CA 94043';
 
 $addressCollection = \Drupal::service('geocoder')->geocode($address, $plugins);
-$geometry = \Drupal::service('plugin.manager.geocoder.dumper')->createInstance
-('geometry')->dump($addressCollection->first());
+$geometry = \Drupal::service('plugin.manager.geocoder.dumper')->createInstance('geometry')->dump($addressCollection->first());
 ```
 
 # Links
