@@ -128,7 +128,9 @@ function geocoder_field_entity_presave(EntityInterface $entity) {
   $dumper_manager = \Drupal::service('plugin.manager.geocoder.dumper');
 
   $geocoder_config = \Drupal::configFactory()->get('geocoder.settings');
-  $geocoder_plugins_options = $geocoder_config->get('plugins_options');
+  // @TODO: This should be refactored the same as the AddressGeocodeFormatter
+  // in the stable release 8.x-2.0.
+  $geocoder_plugins_options = !empty($geocoder_config->get('plugins_options')) ? $geocoder_config->get('plugins_options') : [];
 
   // Eventually converts Plugins Options in Beta1 Json format.
   // @TODO: This should be removed before the stable release 8.x-2.0.

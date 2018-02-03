@@ -217,7 +217,9 @@ abstract class GeocodeFormatterBase extends FormatterBase implements ContainerFa
     $elements = [];
     $dumper = $this->dumperPluginManager->createInstance($this->getSetting('dumper'));
     $provider_plugins = $this->getEnabledProviderPlugins();
-    $geocoder_plugins_options = $this->config->get('plugins_options');
+    // @TODO: This should be refactored the same as the AddressGeocodeFormatter
+    // in the stable release 8.x-2.0.
+    $geocoder_plugins_options = !empty($this->config->get('plugins_options')) ? $this->config->get('plugins_options') : [];
 
     // Eventually converts Plugins Options in Beta1 Json format.
     // @TODO: This should be removed before the stable release 8.x-2.0.
