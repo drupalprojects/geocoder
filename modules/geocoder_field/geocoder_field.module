@@ -224,6 +224,10 @@ function geocoder_field_entity_presave(EntityInterface $entity) {
               if ($field_config->getType() == 'address' && $dumper->getPluginId() == 'geojson') {
                 $result[$delta] = $dumper_manager->setAddressFieldFromGeojson($result[$delta]);
               }
+              // Or an Address Country field is being processed ...
+              if ($field_config->getType() === 'address_country' && $dumper->getPluginId() === 'geojson') {
+                $result[$delta] = $dumper_manager->setCountryFieldFromGeojson($result[$delta]);
+              }
           }
           continue;
         }
