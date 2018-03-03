@@ -1,0 +1,86 @@
+commit 7749afe6799851bb999c01c950c6b28c9a003325
+Author: Alexandr <alexander.cherneha@brander.ua>
+Date:   Fri Mar 2 14:14:48 2018 +0200
+
+    test.
+
+diff --git a/geocoder.services.yml b/geocoder.services.yml
+index 1b7deb4..e2c9c0a 100644
+--- a/geocoder.services.yml
++++ b/geocoder.services.yml
+@@ -5,7 +5,8 @@ services:
+     arguments: ['@plugin.manager.geocoder.provider']
+ 
+   geocoder.http_adapter:
+-    class: Ivory\HttpAdapter\CurlHttpAdapter
++    class: Drupal\geocoder\GeocoderHttpAdapter
++    arguments: ['@http_client']
+ 
+   plugin.manager.geocoder.provider:
+     class: Drupal\geocoder\ProviderPluginManager
+diff --git a/src/GeocoderHttpAdapter.php b/src/GeocoderHttpAdapter.php
+new file mode 100644
+index 0000000..fceb57e
+--- /dev/null
++++ b/src/GeocoderHttpAdapter.php
+@@ -0,0 +1,60 @@
++<?php
++
++namespace Drupal\geocoder;
++
++use GuzzleHttp\ClientInterface;
++use Ivory\HttpAdapter\AbstractHttpAdapter;
++use Ivory\HttpAdapter\Message\InternalRequestInterface;
++/**
++ * Extends AbstractHttpAdapter to provide Guzzle.
++ */
++class GeocoderHttpAdapter extends AbstractHttpAdapter {
++
++  /**
++   * The HTTP client to fetch the feed data with.
++   *
++   * @var \GuzzleHttp\Client
++   */
++  protected $httpClient;
++
++  /**
++   * {@inheritdoc}
++   */
++  public function getName() {
++    return 'geocoder_http_adapter';
++  }
++
++  /**
++   * Creates an http adapter.
++   *
++   * @param \GuzzleHttp\ClientInterface $httpClient
++   *   A Guzzle client object.
++   */
++  public function __construct(ClientInterface $httpClient) {
++    parent::__construct();
++    $this->httpClient = $httpClient;
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  protected function sendInternalRequest(InternalRequestInterface $internalRequest) {
++    $response = $this->httpClient->request($internalRequest->getMethod(), (string) $internalRequest->getUri(), [
++      'headers' => $this->prepareHeaders($internalRequest, FALSE, FALSE),
++    ]);
++    return $response;
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  protected function sendInternalRequests(array $internalRequests, $success, $error) {
++    foreach ($internalRequests as $internalRequest) {
++      $response = $this->httpClient->request($internalRequest->getMethod(), (string) $internalRequest->getUri(), [
++        'headers' => $this->prepareHeaders($internalRequest, FALSE, FALSE),
++      ]);
++      call_user_func($success, $response);
++    }
++  }
++
++}
