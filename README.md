@@ -63,7 +63,7 @@ Geocode functionalities on Entity fields from the Drupal backend:
 From the Geocoder configuration page it is possible to setup custom plugins 
 options.
 
-# Using Geocoder operations behind Proxy 
+### Note: Using Geocoder operations behind Proxy 
 
 GeocoderHttpAdapter is based on the Drupal 8 Guzzle implementation, 
 that is using settings array namespaced under $settings['http_client_config'].
