@@ -137,3 +137,48 @@ geocoder.settings.plugins.tomtom:
     locale:
       type: string
       label: 'The locale'
+
+geocoder.settings.plugins.file:
+  type: sequence
+  label: 'File arguments'
+  sequence:
+
+geocoder.settings.plugins.freegeoip:
+  type: sequence
+  label: 'Freegeoip arguments'
+  sequence:
+
+geocoder.settings.plugins.geoip:
+  type: sequence
+  label: 'Geoip arguments'
+  sequence:
+
+geocoder.settings.plugins.geoplugin:
+  type: sequence
+  label: 'Geoplugin arguments'
+  sequence:
+
+geocoder.settings.plugins.gpxfile:
+  type: sequence
+  label: 'Gpxfile arguments'
+  sequence:
+
+geocoder.settings.plugins.hostip:
+  type: sequence
+  label: 'Hostip arguments'
+  sequence:
+
+geocoder.settings.plugins.openstreetmap:
+  type: sequence
+  label: 'Openstreetmap arguments'
+  sequence:
+
+geocoder.settings.plugins.random:
+  type: sequence
+  label: 'Random arguments'
+  sequence:
+
+geocoder.settings.plugins.yandex:
+  type: sequence
+  label: 'Yandex arguments'
+  sequence:

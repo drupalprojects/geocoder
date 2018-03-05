@@ -167,7 +167,7 @@ class SettingsForm extends ConfigFormBase {
 
       if ($this->typedConfigManager->hasConfigSchema('geocoder.settings.plugins.' . $plugin['id'])) {
         $plugin_config_schema = $this->typedConfigManager->getDefinition('geocoder.settings.plugins.' . $plugin['id']);
-        $plugin_config_schema = $plugin_config_schema['mapping'];
+        $plugin_config_schema = isset($plugin_config_schema['mapping']) ? $plugin_config_schema['mapping'] : [];
       }
 
       $rows[$plugin['id']] = [
