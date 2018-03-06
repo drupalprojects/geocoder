@@ -13,7 +13,7 @@ $plugin = array(
   'title' => t("Yandex (Яндекс.Карт)"),
   'description' => t('Geocodes addresses via Yandex (Яндекс.Карт)'),
   'callback' => 'geocoder_yandex',
-  'field_types' => array('text','text_long','addressfield', 'location','text_with_summary','computed', 'taxonomy_term_reference'),
+  'field_types' => array('text','text_long','addressfield', 'location','text_with_summary','computed', 'taxonomy_term_reference', 'country'),
   'field_callback' => 'geocoder_yandex_field',
   'terms_of_service' => 'http://api.yandex.ru/maps/geocoder/doc/desc/concepts/About.xml',
 );
@@ -50,6 +50,10 @@ function geocoder_yandex_field($field, $field_item) {
   }
   if ($field['type'] == 'addressfield' && module_exists('addressfield') && !addressfield_field_is_empty($field_item, $field)) {
     $address = geocoder_widget_parse_addressfield($field_item);
+    return geocoder_yandex($address);
+  }
+  if ($field['type'] == 'country') {
+    $address = geocoder_widget_parse_countryfield($field_item);
     return geocoder_yandex($address);
   }
   if ($field['type'] == 'location') {

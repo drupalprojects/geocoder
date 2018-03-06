@@ -532,6 +532,18 @@ function geocoder_widget_parse_locationfield($field_item) {
 }
 
 /**
+ * Geocoder Widget - Parse a country field.
+ */
+function geocoder_widget_parse_countryfield($field_item) {
+  $address = '';
+  $country = country_load($field_item['iso2']);
+  if ($country) {
+    $address = $country->name;
+  }
+  return $address;
+}
+
+/**
  * Geocoder Widget utility function to build a link for an entity, ready for use in watchdog().
  */
 function geocoder_widget_get_link($entity_type, $entity) {

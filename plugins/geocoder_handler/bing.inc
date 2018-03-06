@@ -13,7 +13,7 @@ $plugin = array(
   'title' => t("Bing"),
   'description' => t('Geocodes via Bing'),
   'callback' => 'geocoder_bing',
-  'field_types' => array('text', 'text_long', 'addressfield', 'location', 'text_with_summary', 'computed', 'taxonomy_term_reference'),
+  'field_types' => array('text', 'text_long', 'addressfield', 'location', 'text_with_summary', 'computed', 'taxonomy_term_reference', 'country'),
   'field_callback' => 'geocoder_bing_field',
   'terms_of_service' => 'http://msdn.microsoft.com/en-us/library/ff701714.aspx',
 );
@@ -119,6 +119,10 @@ function geocoder_bing_field($field, $field_item) {
   }
   if ($field['type'] == 'addressfield' && module_exists('addressfield') && !addressfield_field_is_empty($field_item, $field)) {
     $address = geocoder_widget_parse_addressfield($field_item);
+    return geocoder_bing($address, array('address' => $address));
+  }
+  if ($field['type'] == 'country' && module_exists('countries')) {
+    $address = geocoder_widget_parse_countryfield($field_item);
     return geocoder_bing($address, array('address' => $address));
   }
   if ($field['type'] == 'location') {

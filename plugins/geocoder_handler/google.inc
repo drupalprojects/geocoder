@@ -13,7 +13,7 @@ $plugin = array(
   'title' => t("Google Geocoder"),
   'description' => t('Geocodes via google geocoder'),
   'callback' => 'geocoder_google',
-  'field_types' => array('text', 'text_long', 'addressfield', 'location', 'text_with_summary', 'computed', 'taxonomy_term_reference'),
+  'field_types' => array('text', 'text_long', 'addressfield', 'location', 'text_with_summary', 'computed', 'taxonomy_term_reference', 'country'),
   'field_callback' => 'geocoder_google_field',
   'settings_callback' => 'geocoder_google_form',
   'terms_of_service' => 'http://code.google.com/apis/maps/documentation/geocoding/#Limits',
@@ -200,6 +200,10 @@ function geocoder_google_field($field, $field_item, $options = array()) {
   }
   if ($field['type'] == 'addressfield' && module_exists('addressfield') && !addressfield_field_is_empty($field_item, $field)) {
     $address = geocoder_widget_parse_addressfield($field_item);
+    return geocoder_google($address, $options);
+  }
+  if ($field['type'] == 'country') {
+    $address = geocoder_widget_parse_countryfield($field_item);
     return geocoder_google($address, $options);
   }
   if ($field['type'] == 'location') {
