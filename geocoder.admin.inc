@@ -21,7 +21,7 @@ function geocoder_admin_settings($form, &$form_state) {
   $form['geocoder_apikey_yandex'] = array(
     '#type' => 'textfield',
     '#title' => t('Yandex Maps API Key'),
-    '#description' => t('You can obtain a Yandex API Key at ') . 'http://api.yandex.ru/maps/getkey.xml',
+    '#description' => t('You can obtain a Yandex API Key at !link.', array('!link' => l(t('https://tech.yandex.com/maps/keys'), 'https://tech.yandex.com/maps/keys'))),
     '#default_value' => empty($geocoder_settings['geocoder_apikey_yandex']) ? '' : $geocoder_settings['geocoder_apikey_yandex'],
     '#required' => FALSE,
   );
