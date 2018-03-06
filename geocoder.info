@@ -2,6 +2,7 @@ name = Geocoder
 description = An API and widget to geocode various known data into other GIS data types.
 core = 7.x
 dependencies[] = geophp
+dependencies[] = geofield (>=1.x)
 dependencies[] = ctools
 dependencies[] = entity
 

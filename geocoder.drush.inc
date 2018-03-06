@@ -37,6 +37,10 @@ function geocoder_drush_backfill() {
               $results = $query->execute();
               while ($id = $results->fetchField()) {
                 $entity = $entity_load($id);
+                // Skip geocoding if this entity is overridden.
+                if (!empty($entity->geocoder_overridden)) {
+                  continue;
+                }
                 $langcode = field_language($entity_type, $entity, $field_name);
                 $items = field_get_items($entity_type, $entity, $field_name, $langcode);
 
