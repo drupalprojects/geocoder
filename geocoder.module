@@ -388,3 +388,10 @@ function geocoder_cache_set($geometry, $handler, $data, $options) {
   $data['geometry'] = $geometry ? $geometry : FALSE;
   cache_set($cid, $data, 'cache_geocoder', variable_get('geocoder_cache_ttl', CACHE_PERMANENT));
 }
+
+/**
+ * Implements hook_flush_caches().
+ */
+function geocoder_flush_caches() {
+  return array('cache_geocoder');
+}
