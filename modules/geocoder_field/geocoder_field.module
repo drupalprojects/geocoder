@@ -81,6 +81,15 @@ function geocoder_field_form_field_config_edit_form_alter(array &$form, FormStat
  *   The form state object.
  */
 function geocoder_field_field_config_edit_form_validate(array $form, FormStateInterface $form_state) {
+  // Don't store any settings for this field if it's not configured to use
+  // geocoding.
+  $third_party_settings = $form_state->getValue('third_party_settings');
+  if ($third_party_settings['geocoder_field']['method'] == 'none') {
+    unset($third_party_settings['geocoder_field']);
+    $form_state->setValue('third_party_settings', $third_party_settings);
+    return;
+  }
+
   // Clean-up and normalize the plugin list.
   $trail = ['third_party_settings', 'geocoder_field', 'plugins'];
   $plugins = array_keys(
