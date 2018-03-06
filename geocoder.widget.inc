@@ -8,6 +8,12 @@ function geocoder_field_widget_info() {
     'geocoder' => array(
       'label' => t('Geocode from another field'),
       'field types' => array('geofield', 'geolocation_latlng', 'location', 'postgis'),
+      'settings' => array(
+        'geocoder_field' => NULL,
+        'geocoder_handler' => NULL,
+        'handler_settings' => array(),
+        'delta_handling' => 'default',
+      ),
       'behaviors' => array(
         'multiple values' => FIELD_BEHAVIOR_CUSTOM,
         'default value' => FIELD_BEHAVIOR_NONE,
