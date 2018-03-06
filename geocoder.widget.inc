@@ -212,7 +212,7 @@ function geocoder_field_widget_form(&$form, &$form_state, $field, $instance, $la
     // Add element process to states to lat/long.
     $element['#process'][] = 'geocoder_process_override';
     $element['#element_validate'][] = 'geocoder_element_validate';
-    
+
     return array($delta => $element);
   }
 }
@@ -601,6 +601,7 @@ function geocoder_widget_parse_addressfield($field_item) {
   $address[] = !empty($field_item['sub_premise']) ? $field_item['sub_premise'] : NULL;
   $address[] = !empty($field_item['thoroughfare']) ? $field_item['thoroughfare'] : NULL;
   $address[] = !empty($field_item['locality']) ? $field_item['locality'] : NULL;
+  $address[] = !empty($field_item['postal_code']) ? $field_item['postal_code'] : NULL;
   if (!empty($field_item['country']) && !empty($field_item['administrative_area'])) {
     module_load_include('inc', 'addressfield', 'addressfield.administrative_areas');
     $address[] = addressfield_get_administrative_areas($field_item['country'])[$field_item['administrative_area']];
@@ -626,8 +627,6 @@ function geocoder_widget_parse_addressfield($field_item) {
     $address[] = $field_item['country'];
   }
 
-  $address[] = !empty($field_item['postal_code']) ? $field_item['postal_code'] : NULL;
-
   return implode(',', array_filter($address));
 }
 
@@ -639,12 +638,12 @@ function geocoder_widget_parse_locationfield($field_item) {
   if (!empty($field_item['street']))      $address .= $field_item['street'] . ',';
   if (!empty($field_item['additional']))  $address .= $field_item['additional'] . ',';
   if (!empty($field_item['city']))        $address .= $field_item['city'] . ',';
+  if (!empty($field_item['postal_code'])) $address .= $field_item['postal_code'] . ',';
   if (!empty($field_item['province']) && function_exists('location_province_name')) {
     $province_fullname = location_province_name($field_item['country'], $field_item['province']);
     $address .=  $province_fullname . ',';
   }
   if (!empty($field_item['country']))     $address .= $field_item['country'] . ',';
-  if (!empty($field_item['postal_code'])) $address .= $field_item['postal_code'] . ',';
 
   $address = rtrim($address, ', ');
 
