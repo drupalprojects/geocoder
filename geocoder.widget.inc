@@ -547,12 +547,16 @@ function geocoder_widget_parse_countryfield($field_item) {
  * Geocoder Widget utility function to build a link for an entity, ready for use in watchdog().
  */
 function geocoder_widget_get_link($entity_type, $entity) {
-  $uri_info = entity_uri($entity_type, $entity);
-  list($id, , $bundle) = entity_extract_ids($entity_type, $entity);
-  $label = t('View offending @entity_type (@bundle # @id)', array(
-    '@entity_type' => $entity_type,
-    '@bundle' => $bundle,
-    '@id' => $id,
-  ));
-  return l($label, $uri_info['path'], $uri_info);
+  if ($uri_info = entity_uri($entity_type, $entity)) {
+    list($id, , $bundle) = entity_extract_ids($entity_type, $entity);
+    $label = t('View offending @entity_type (@bundle #@id)', array(
+      '@entity_type' => $entity_type,
+      '@bundle' => $bundle,
+      '@id' => $id,
+    ));
+
+    return l($label, $uri_info['path'], $uri_info);
+  }
+
+  return NULL;
 }
