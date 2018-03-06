@@ -200,6 +200,9 @@ function geocoder_google_field($field, $field_item, $options = array()) {
   }
   if ($field['type'] == 'addressfield' && module_exists('addressfield') && !addressfield_field_is_empty($field_item, $field)) {
     $address = geocoder_widget_parse_addressfield($field_item);
+    if(empty($address)) {
+      return FALSE;
+    }
     return geocoder_google($address, $options);
   }
   if ($field['type'] == 'country') {
