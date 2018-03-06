@@ -14,6 +14,35 @@ define('GEOCODER_GOOGLE_AUTH_WORK', 3);
 
 /**
  * The Geocoder API call.
+ * TODO
+ */
+function geocoder_reverse($handler, $lat, $long, $options = array(), $cache_type = 2, $cache_reset = FALSE) {
+  ctools_include('plugins');
+  static $static_cache_reverse = array();
+
+  if ($cache_reset) {
+    $static_cache_reverse = array();
+  }
+
+  if ($cache_type) {
+    $cache_id = $handler . '_' . md5(serialize(array($lat, $long, $options)));
+    if (!empty($static_cache_reverse[$cache_id])) {
+      return $static_cache_reverse[$cache_id];
+    }
+  }
+
+  $processor = ctools_get_plugins('geocoder', 'geocoder_reverse_handler', $handler);
+  $address = call_user_func($processor['callback'], $lat, $long, $options);
+
+  if ($cache_type) {
+    $static_cache_reverse[$cache_id] = $address;
+  }
+
+  return $address;
+}
+
+/**
+ * The Geocoder API call.
  *
  * Given a handler and data, geocode the data into a geometry object using the handler.
  *
@@ -187,6 +216,7 @@ function geocoder_ctools_plugin_type() {
     'geocoder_handler' => array(
       'cache' => TRUE,
     ),
+    'geocoder_reverse_handler' => array(),
   );
 }
 
