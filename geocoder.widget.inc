@@ -92,7 +92,7 @@ function geocoder_field_widget_settings_form($this_field, $instance) {
   }
 
   // Extend with virtual fields.
-  $info = entity_get_all_property_info($instance['entity_type']);
+  $info = entity_get_property_info($instance['entity_type']);
   foreach ($info as $property_name => $property) {
     if (isset($property['type']) && in_array($property['type'], array('location', 'text'))) {
       if (!isset($valid_fields[$property_name])) {
