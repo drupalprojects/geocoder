@@ -7,12 +7,11 @@ use Ivory\HttpAdapter\AbstractHttpAdapter;
 use Ivory\HttpAdapter\Message\InternalRequestInterface;
 
 /**
- * Extends AbstractHttpAdapter to provide Guzzle.
+ * Extends AbstractHttpAdapter to use Guzzle.
  */
 class GeocoderHttpAdapter extends AbstractHttpAdapter {
-
   /**
-   * The HTTP client to fetch the feed data with.
+   * The HTTP client.
    *
    * @var \GuzzleHttp\Client
    */
@@ -26,7 +25,7 @@ class GeocoderHttpAdapter extends AbstractHttpAdapter {
   }
 
   /**
-   * Creates an http adapter.
+   * Creates an HTTP adapter.
    *
    * @param \GuzzleHttp\ClientInterface $httpClient
    *   A Guzzle client object.
@@ -40,22 +39,9 @@ class GeocoderHttpAdapter extends AbstractHttpAdapter {
    * {@inheritdoc}
    */
   protected function sendInternalRequest(InternalRequestInterface $internalRequest) {
-    $response = $this->httpClient->request($internalRequest->getMethod(), (string) $internalRequest->getUri(), [
+    return $this->httpClient->request($internalRequest->getMethod(), (string) $internalRequest->getUri(), [
       'headers' => $this->prepareHeaders($internalRequest, FALSE, FALSE),
     ]);
-    return $response;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  protected function sendInternalRequests(array $internalRequests, $success, $error) {
-    foreach ($internalRequests as $internalRequest) {
-      $response = $this->httpClient->request($internalRequest->getMethod(), (string) $internalRequest->getUri(), [
-        'headers' => $this->prepareHeaders($internalRequest, FALSE, FALSE),
-      ]);
-      call_user_func($success, $response);
-    }
   }
 
 }
