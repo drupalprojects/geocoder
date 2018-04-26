@@ -187,12 +187,12 @@ function geocoder_field_entity_presave(EntityInterface $entity) {
         switch ($geocoder['method']) {
           case 'source':
             $failure_status_message = t("Unable to geocode '@text'.", ['@text' => $value['value']]);
-            $address_collection = \Drupal::service('geocoder')->geocode($value['value'], $geocoder['plugins'], $geocoder_plugins_options);
+            $address_collection = \Drupal::service('geocoder')->geocode($value['value'], array_fill_keys($geocoder['plugins'], $geocoder['plugins']), $geocoder_plugins_options);
             break;
 
           case 'destination':
             $failure_status_message = t("Unable to reverse geocode the <em>@field_name</em> value.", ['@field_name' => $field_name]);
-            $address_collection = isset($value['lat']) && isset($value['lon']) ? \Drupal::service('geocoder')->reverse($value['lat'], $value['lon'], $geocoder['plugins'], $geocoder_plugins_options) : NULL;
+            $address_collection = isset($value['lat']) && isset($value['lon']) ? \Drupal::service('geocoder')->reverse($value['lat'], $value['lon'], array_fill_keys($geocoder['plugins'], $geocoder['plugins']), $geocoder_plugins_options) : NULL;
             break;
 
           default:
