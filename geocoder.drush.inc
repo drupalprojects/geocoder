@@ -48,14 +48,14 @@ function geocoder_drush_backfill() {
       return;
     }
     $expected_bundle = NULL;
-    $expected_entity_ids = [];
+    $expected_entity_ids = array();
   }
 
   foreach (field_info_instances() as $entity_type => $instances_by_bundle) {
     if ($expected_entity_type && $entity_type !== $expected_entity_type) {
       continue;
     }
-    $entities_to_save = [];
+    $entities_to_save = array();
     foreach ($instances_by_bundle as $bundle => $instances_by_fieldname) {
       if ($expected_bundle && $bundle !== $expected_bundle) {
         continue;
@@ -95,7 +95,7 @@ function geocoder_drush_backfill() {
 
         $etids_orig = $result->fetchCol();
 
-        if ([] === $etids_orig) {
+        if (array() === $etids_orig) {
           drush_log($entity_type . ': ' . $bundle . ': ' . $dest_field_name . ': -', 'ok');
           continue;
         }
@@ -106,7 +106,7 @@ function geocoder_drush_backfill() {
 
         drush_log($entity_type . ': ' . $bundle . ': ' . $dest_field_name . ': ' . implode(', ',$etids), 'ok');
 
-        if ([] !== $etids_orphan) {
+        if (array() !== $etids_orphan) {
           drush_log('Orphan etids: ' . implode(', ',$etids_orphan), 'warning');
         }
 
