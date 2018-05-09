@@ -27,7 +27,6 @@ function geocoder_drush_command() {
  * Drush command callback for 'geocoder-backfill'.
  */
 function geocoder_drush_backfill() {
-
   // Note:
   // The values from drush_get_option() are not guaranteed to be in a format one
   // might expect, and must be considered unsafe.
