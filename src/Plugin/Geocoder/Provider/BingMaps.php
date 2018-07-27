@@ -10,10 +10,9 @@ use Drupal\geocoder\ProviderUsingHandlerWithAdapterBase;
  * @GeocoderProvider(
  *   id = "bingmaps",
  *   name = "BingMaps",
- *   handler = "\Geocoder\Provider\BingMaps",
+ *   handler = "\Geocoder\Provider\BingMaps\BingMaps",
  *   arguments = {
- *     "apikey" = NULL,
- *     "locale" = NULL
+ *     "apiKey" = ""
  *   }
  * )
  */

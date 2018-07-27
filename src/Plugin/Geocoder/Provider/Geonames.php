@@ -10,10 +10,9 @@ use Drupal\geocoder\ProviderUsingHandlerWithAdapterBase;
  * @GeocoderProvider(
  *   id = "geonames",
  *   name = "Geonames",
- *   handler = "\Geocoder\Provider\Geonames",
+ *   handler = "\Geocoder\Provider\Geonames\Geonames",
  *   arguments = {
- *     "username" = NULL,
- *     "locale" = NULL
+ *     "username" = ""
  *   }
  * )
  */

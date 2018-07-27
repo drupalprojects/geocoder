@@ -10,7 +10,10 @@ use Drupal\geocoder\ProviderUsingHandlerWithAdapterBase;
  * @GeocoderProvider(
  *   id = "yandex",
  *   name = "Yandex",
- *   handler = "\Geocoder\Provider\Yandex"
+ *   handler = "\Geocoder\Provider\Yandex\Yandex",
+ *   arguments = {
+ *     "toponym"
+ *   }
  * )
  */
 class Yandex extends ProviderUsingHandlerWithAdapterBase {}

@@ -10,10 +10,9 @@ use Drupal\geocoder\ProviderUsingHandlerWithAdapterBase;
  * @GeocoderProvider(
  *   id = "nominatim",
  *   name = "Nominatim",
- *   handler = "\Geocoder\Provider\Nominatim",
+ *   handler = "\Geocoder\Provider\Nominatim\Nominatim",
  *   arguments = {
- *     "rooturl" = NULL,
- *     "locale" = NULL
+ *     "rootUrl",
  *   }
  * )
  */

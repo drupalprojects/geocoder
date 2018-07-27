@@ -4,7 +4,7 @@ namespace Drupal\geocoder\Plugin\Geocoder\Provider;
 
 use Drupal\Core\Locale\CountryManager;
 use Drupal\geocoder\ProviderBase;
-use Geocoder\Model\AddressFactory;
+use Geocoder\Model\Address;
 
 /**
  * Class Random.
@@ -19,7 +19,7 @@ class Random extends ProviderBase {
   /**
    * The address factory.
    *
-   * @var \Geocoder\Model\AddressFactory
+   * @var \Geocoder\Model\Address
    */
   protected $addressFactory;
 
@@ -112,12 +112,12 @@ class Random extends ProviderBase {
   /**
    * Returns the address factory.
    *
-   * @return \Geocoder\Model\AddressFactory
+   * @return \Geocoder\Model\Address
    *   Return the address Factory.
    */
   protected function getAddressFactory() {
     if (!isset($this->addressFactory)) {
-      $this->addressFactory = new AddressFactory();
+      $this->addressFactory = new Address();
     }
     return $this->addressFactory;
   }

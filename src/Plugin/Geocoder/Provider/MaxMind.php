@@ -10,11 +10,10 @@ use Drupal\geocoder\ProviderUsingHandlerWithAdapterBase;
  * @GeocoderProvider(
  *   id = "maxmind",
  *   name = "MaxMind",
- *   handler = "\Geocoder\Provider\MaxMind",
+ *   handler = "\Geocoder\Provider\MaxMind\MaxMind",
  *   arguments = {
- *     "apikey" = NULL,
+ *     "apiKey" = "",
  *     "service" = "f",
- *     "usessl" = FALSE
  *   }
  * )
  */

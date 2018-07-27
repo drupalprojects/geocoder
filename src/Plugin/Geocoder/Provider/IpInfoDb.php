@@ -10,9 +10,9 @@ use Drupal\geocoder\ProviderUsingHandlerWithAdapterBase;
  * @GeocoderProvider(
  *   id = "ipinfodb",
  *   name = "IpInfoDb",
- *   handler = "\Geocoder\Provider\IpInfoDb",
+ *   handler = "\Geocoder\Provider\IpInfoDb\IpInfoDb",
  *   arguments = {
- *     "apikey" = NULL,
+ *     "apiKey" = "",
  *     "precision" = "city"
  *   }
  * )

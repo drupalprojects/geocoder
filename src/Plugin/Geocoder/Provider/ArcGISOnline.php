@@ -10,10 +10,9 @@ use Drupal\geocoder\ProviderUsingHandlerWithAdapterBase;
  * @GeocoderProvider(
  *   id = "arcgisonline",
  *   name = "ArcGISOnline",
- *   handler = "\Geocoder\Provider\ArcGISOnline",
+ *   handler = "\Geocoder\Provider\ArcGISOnline\ArcGISOnline",
  *   arguments = {
- *     "sourcecountry" = NULL,
- *     "usessl" = false
+ *     "sourceCountry"
  *   }
  * )
  */

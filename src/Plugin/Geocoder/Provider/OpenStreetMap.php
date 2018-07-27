@@ -10,7 +10,10 @@ use Drupal\geocoder\ProviderUsingHandlerWithAdapterBase;
  * @GeocoderProvider(
  *   id = "openstreetmap",
  *   name = "OpenStreetMap",
- *   handler = "\Geocoder\Provider\OpenStreetMap"
+ *   handler = "\Geocoder\Provider\Nominatim\Nominatim",
+ *   arguments = {
+ *     "rootUrl" = "https://nominatim.openstreetmap.org",
+ *   }
  * )
  */
 class OpenStreetMap extends ProviderUsingHandlerWithAdapterBase {}
