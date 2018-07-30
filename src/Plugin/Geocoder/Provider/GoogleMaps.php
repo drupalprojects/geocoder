@@ -12,8 +12,8 @@ use Drupal\geocoder\ProviderUsingHandlerWithAdapterBase;
  *   name = "GoogleMaps",
  *   handler = "\Geocoder\Provider\GoogleMaps\GoogleMaps",
  *   arguments = {
- *     "region",
- *     "apiKey"
+ *     "region" = "",
+ *     "apiKey" = ""
  *   }
  * )
  */

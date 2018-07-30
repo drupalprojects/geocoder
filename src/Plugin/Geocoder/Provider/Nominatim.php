@@ -12,7 +12,9 @@ use Drupal\geocoder\ProviderUsingHandlerWithAdapterBase;
  *   name = "Nominatim",
  *   handler = "\Geocoder\Provider\Nominatim\Nominatim",
  *   arguments = {
- *     "rootUrl",
+ *     "rootUrl" = "",
+ *     "userAgent" = "",
+ *     "referer" = ""
  *   }
  * )
  */

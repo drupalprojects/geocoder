@@ -19,19 +19,16 @@ geocoder.settings.plugins.googlemaps:
   type: mapping
   label: 'GoogleMaps arguments'
   mapping:
-    apikey:
+    apiKey:
       type: string
-      label: 'The apikey'
-      description: '<a href="https://developers.google.com/maps/documentation/javascript/get-api-key">Get a valid Google Maps Api Key</a>'
-    locale:
-      type: string
-      label: 'The locale'
+      nullable: true
+      label: 'Google Geocoding API key (optional)'
+      description: '<a href="https://developers.google.com/maps/documentation/javascript/get-api-key#standard-auth">Follow these steps to get an API key</a>'
     region:
       type: string
-      label: 'The region'
-    usessl:
-      type: boolean
-      label: 'Use SSL'
+      nullable: true
+      label: 'Region code for region biasing (optional)'
+      description: 'See <a href="https://developers.google.com/maps/documentation/javascript/geocoding#GeocodingRegionCodes">Region code biasing</a>'
 
 geocoder.settings.plugins.googlemaps_business:
   type: mapping
@@ -39,43 +36,46 @@ geocoder.settings.plugins.googlemaps_business:
   mapping:
     clientId:
       type: string
-      label: 'The client ID'
-      description: '<a href="https://developers.google.com/maps/documentation/javascript/get-api-key">Get a valid Google Maps Client ID</a>'
+      label: 'Client ID'
+      description: '<a href="https://developers.google.com/maps/documentation/geocoding/get-api-key#client-id">Authenticating your application using a client ID and digital signature</a>'
     privateKey:
       type: string
-      label: 'The private key'
-      description: '<a href="https://developers.google.com/maps/documentation/javascript/get-api-key#client-id">Get a valid Google Maps Private Key</a>'
-    locale:
+      nullable: true
+      label: 'Private key (optional)'
+      description: '<a href="https://developers.google.com/maps/documentation/geocoding/get-api-key#cryptographic_signing_keys">Getting a private cryptographic key</a>'
+    apiKey:
       type: string
-      label: 'The locale'
+      nullable: true
+      label: 'Google Geocoding API key (optional)'
+      description: '<a href="https://developers.google.com/maps/documentation/javascript/get-api-key#standard-auth">Follow these steps to get an API key</a>'
     region:
       type: string
-      label: 'The region'
-    usessl:
-      type: boolean
-      label: 'Use SSL'
+      nullable: true
+      label: 'Region code for region biasing (optional)'
+      description: 'See <a href="https://developers.google.com/maps/documentation/javascript/geocoding#GeocodingRegionCodes">Region code biasing</a>'
+    channel:
+      type: string
+      nullable: true
+      label: 'Channel (optional)'
+      description: 'See <a href="https://developers.google.com/maps/premium/reports/usage-reports#channels">What are channels?</a>'
 
 geocoder.settings.plugins.arcgisonline:
   type: mapping
   label: 'ArcGISOnline arguments'
   mapping:
-    sourcecountry:
+    sourceCountry:
       type: string
-      label: 'The source country'
-    usessl:
-      type: boolean
-      label: 'Use SSL'
+      label: 'Source country for country biasing (optional)'
+      nullable: true
 
 geocoder.settings.plugins.bingmaps:
   type: mapping
   label: 'Bingmaps arguments'
   mapping:
-    apikey:
+    apiKey:
       type: string
-      label: 'The apikey'
-    locale:
-      type: string
-      label: 'The locale'
+      label: 'API key'
+      description: '<a href="https://msdn.microsoft.com/en-us/library/ff428642.aspx">Getting a Bing Maps API key</a>'
 
 geocoder.settings.plugins.geonames:
   type: mapping
@@ -83,82 +83,83 @@ geocoder.settings.plugins.geonames:
   mapping:
     username:
       type: string
-      label: 'The username'
-    locale:
-      type: string
-      label: 'The locale'
+      label: 'Username'
+      description: 'Create a free user account at <a href="http://www.geonames.org/login">www.geonames.org/login</a>'
 
 geocoder.settings.plugins.ipinfodb:
   type: mapping
   label: 'IpInfoDb arguments'
   mapping:
-    apikey:
+    apiKey:
       type: string
-      label: 'The apikey'
+      label: 'API key'
+      description: 'Get an API key by creating a free account at <a href="https://www.ipinfodb.com/register">www.ipinfodb.com/register</a>'
     precision:
       type: string
-      label: 'The precision'
+      nullable: true
+      label: 'Precision (optional)'
+      description: 'Either "city" or "country" (faster). Defaults to "city".'
 
 geocoder.settings.plugins.mapquest:
   type: mapping
   label: 'MapQuest arguments'
   mapping:
-    apikey:
+    apiKey:
       type: string
-      label: 'The apikey'
+      label: 'API key'
+      description: '<a href="https://developer.mapquest.com/">Get your free API key</a>'
     licensed:
       type: boolean
-      label: 'Is licensed'
+      label: 'Licensed'
+      description: 'Whether to use MapQuest''s licensed endpoints. Uncheck to use the open endpoints.'
 
 geocoder.settings.plugins.maxmind:
   type: mapping
   label: 'MaxMind arguments'
   mapping:
-    apikey:
+    apiKey:
       type: string
-      label: 'The apikey'
+      label: 'API key'
     service:
       type: string
-      label: 'The service'
-    usessl:
-      type: boolean
-      label: 'Use SSL'
+      nullable: true
+      label: 'MaxMind service (optional)'
+      description: 'Can be either "a", "b", "f" or "e". Defaults to "f". See <a href="https://dev.maxmind.com/geoip/legacy/web-services/#Per-Service_URIs">Services</a>'
 
 geocoder.settings.plugins.nominatim:
   type: mapping
   label: 'Nominatim arguments'
   mapping:
-    rooturl:
+    rootUrl:
       type: string
-      label: 'The root URL'
-    locale:
+      label: 'Root URL'
+      description: 'Root URL of the nominatim server'
+    userAgent:
       type: string
-      label: 'The locale'
+      label: 'User agent'
+      description: 'Value of the User-Agent header'
+    referer:
+      type: string
+      label: 'Referer'
+      description: 'Value of the Referer header'
 
 geocoder.settings.plugins.opencage:
   type: mapping
   label: 'OpenCage arguments'
   mapping:
-    apikey:
+    apiKey:
       type: string
-      label: 'The apikey'
-    locale:
-      type: string
-      label: 'The locale'
-    usessl:
-      type: boolean
-      label: 'Use SSL'
+      label: 'API key'
+      description: 'Sign up for a free API key at <a href="https://opencagedata.com/users/sign_up">opencagedata.com/users/sign_up</a>'
 
 geocoder.settings.plugins.tomtom:
   type: mapping
   label: 'TomTom arguments'
   mapping:
-    apikey:
+    apiKey:
       type: string
-      label: 'The apikey'
-    locale:
-      type: string
-      label: 'The locale'
+      label: 'API key'
+      description: '<a href="https://developer.tomtom.com/apps/myapps">Request an evaluation API key</a>'
 
 geocoder.settings.plugins.file:
   type: sequence

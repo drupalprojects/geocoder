@@ -12,7 +12,7 @@ use Drupal\geocoder\ProviderUsingHandlerWithAdapterBase;
  *   name = "ArcGISOnline",
  *   handler = "\Geocoder\Provider\ArcGISOnline\ArcGISOnline",
  *   arguments = {
- *     "sourceCountry"
+ *     "sourceCountry" = ""
  *   }
  * )
  */
