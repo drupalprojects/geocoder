@@ -194,7 +194,15 @@ geocoder.settings.plugins.hostip:
 geocoder.settings.plugins.openstreetmap:
   type: sequence
   label: 'Openstreetmap arguments'
-  sequence:
+  mapping:
+    userAgent:
+      type: string
+      label: 'User agent'
+      description: 'Value of the User-Agent header'
+    referer:
+      type: string
+      label: 'Referer'
+      description: 'Value of the Referer header'
 
 geocoder.settings.plugins.random:
   type: sequence

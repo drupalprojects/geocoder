@@ -13,6 +13,8 @@ use Drupal\geocoder\ProviderUsingHandlerWithAdapterBase;
  *   handler = "\Geocoder\Provider\Nominatim\Nominatim",
  *   arguments = {
  *     "rootUrl" = "https://nominatim.openstreetmap.org",
+ *     "userAgent" = "",
+ *     "referer" = ""
  *   }
  * )
  */
