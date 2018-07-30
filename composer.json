@@ -6,10 +6,6 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "homepage": "https://drupal.org/project/geocoder",
-    "require": {
-        "php": ">=7.1.0",
-        "php-http/guzzle6-adapter": "^1.1"
-    },
     "authors": [
         {
             "name": "Pol Dellaiera (@drupol)",
@@ -27,11 +23,30 @@
         "irc": "irc://irc.freenode.org/drupal-geo",
         "source": "https://cgit.drupalcode.org/geocoder"
     },
+    "require": {
+        "php": ">=7.1.0",
+        "php-http/guzzle6-adapter": "^1.1"
+    },
     "require-dev": {
         "phpro/grumphp": "^0.12.1",
         "squizlabs/php_codesniffer": "^2.7",
         "sensiolabs/security-checker": "^4.1",
         "phpunit/phpunit": "^5.7|^6.5",
-        "drupal/coder": "^8.2"
+        "drupal/coder": "^8.2",
+        "geocoder-php/arcgis-online-provider": "^4.0",
+        "geocoder-php/bing-maps-provider": "^4.0",
+        "geocoder-php/free-geoip-provider": "^4.1",
+        "geocoder-php/geoips-provider": "^4.1",
+        "geocoder-php/geonames-provider": "^4.1",
+        "geocoder-php/geo-plugin-provider": "^4.0",
+        "geocoder-php/google-maps-provider": "^4.2",
+        "geocoder-php/host-ip-provider": "^4.0",
+        "geocoder-php/ip-info-db-provider": "^4.0",
+        "geocoder-php/mapquest-provider": "^4.0",
+        "geocoder-php/maxmind-provider": "^4.1",
+        "geocoder-php/nominatim-provider": "^5.0",
+        "geocoder-php/open-cage-provider": "^4.0",
+        "geocoder-php/tomtom-provider": "^4.0",
+        "geocoder-php/yandex-provider": "^4.0"
     }
 }
