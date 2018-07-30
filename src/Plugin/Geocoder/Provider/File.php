@@ -10,7 +10,10 @@ use Drupal\geocoder\ProviderUsingHandlerBase;
  * @GeocoderProvider(
  *   id = "file",
  *   name = "File",
- *   handler = "\Drupal\geocoder\Geocoder\Provider\File"
+ *   handler = "\Drupal\geocoder\Geocoder\Provider\File",
+ *   arguments = {
+ *     "filename" = ""
+ *   }
  * )
  */
 class File extends ProviderUsingHandlerBase {}

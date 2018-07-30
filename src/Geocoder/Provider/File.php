@@ -18,6 +18,21 @@ use Geocoder\Query\ReverseQuery;
 class File extends AbstractProvider implements Provider {
 
   /**
+   * The name of the file that is being geocoded.
+   */
+  protected $filename;
+
+  /**
+   * Constructs a new File provider.
+   *
+   * @param string $filename
+   *   The name of the file to read from.
+   */
+  public function __construct(string $filename) {
+    $this->filename = $filename;
+  }
+
+  /**
    * {@inheritdoc}
    */
   public function getName(): string {
