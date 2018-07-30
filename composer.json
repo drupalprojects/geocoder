@@ -7,9 +7,7 @@
     "prefer-stable": true,
     "homepage": "https://drupal.org/project/geocoder",
     "require": {
-        "geocoder-php/geocoder": "^4.0",
-        "php-http/guzzle6-adapter": "^1.1",
-        "php-http/message": "^1.0"
+        "php": ">=7.1.0"
     },
     "authors": [
         {
