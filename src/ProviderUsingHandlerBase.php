@@ -5,18 +5,27 @@ namespace Drupal\geocoder;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException;
+use Geocoder\StatefulGeocoder;
 
 /**
  * Provides a base class for providers using handlers.
  */
 abstract class ProviderUsingHandlerBase extends ProviderBase {
 
+  protected $langCode;
   /**
    * The provider handler.
    *
    * @var \Geocoder\Provider\Provider
    */
   protected $handler;
+
+  /**
+   * The V4 Stateful handler wrapper.
+   *
+   * @var \Geocoder\StatefulGeocoder
+   */
+  protected $handlerWrapper;
 
   /**
    * {@inheritdoc}
@@ -32,14 +41,16 @@ abstract class ProviderUsingHandlerBase extends ProviderBase {
    * {@inheritdoc}
    */
   protected function doGeocode($source) {
-    return $this->getHandler()->geocode($source);
+    $geocoder = $this->getHandlerWrapper();
+    return $geocoder->geocode($source);
   }
 
   /**
    * {@inheritdoc}
    */
   protected function doReverse($latitude, $longitude) {
-    return $this->getHandler()->reverse($latitude, $longitude);
+    $geocoder = $this->getHandlerWrapper();
+    return $geocoder->reverse($latitude, $longitude);
   }
 
   /**
@@ -56,6 +67,43 @@ abstract class ProviderUsingHandlerBase extends ProviderBase {
     }
 
     return $this->handler;
+  }
+
+  /**
+   * Sets the language code to use.
+   *
+   * @param string $langCode
+   *   The language code to use.
+   */
+  public function setLangCode($langCode) {
+    $this->langCode = $langCode;
+  }
+
+  /**
+   * Gets the language code to use with the stateful wrapper.
+   *
+   * @return string
+   *   The language code.  Defaults to current language.
+   */
+  protected function getLangCode() {
+    if (!isset($this->langCode)) {
+      // TODO: need to inject language manager to do this properly.
+      $this->langCode = \Drupal::languageManager()->getCurrentLanguage()->getId();
+    }
+    return $this->langCode;
+  }
+
+  /**
+   * Returns the V4 Stateful wrapper.
+   *
+   * @return \Geocoder\StatefulGeocoder
+   *   The current handler wrapped in this class.
+   */
+  protected function getHandlerWrapper() {
+    if (!isset($this->handlerWrapper)) {
+      $this->handlerWrapper = new StatefulGeocoder($this->getHandler(), $this->getLangCode());
+    }
+    return $this->handlerWrapper;
   }
 
   /**

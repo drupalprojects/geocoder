@@ -3,7 +3,7 @@
 namespace Drupal\geocoder_geofield\Geocoder\Dumper;
 
 use Geocoder\Dumper\Dumper;
-use Geocoder\Model\Address;
+use Geocoder\Location;
 
 /**
  * Class for Geohash.
@@ -27,7 +27,8 @@ class Geohash extends Geometry implements Dumper {
   /**
    * {@inheritdoc}
    */
-  public function dump(Address $address) {
+  public function dump(Location $location) {
+    throw new \Exception('Update ' . __METHOD__);
     return parent::dump($address)->out('geohash');
   }
 

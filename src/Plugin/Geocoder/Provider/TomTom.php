@@ -10,10 +10,9 @@ use Drupal\geocoder\ProviderUsingHandlerWithAdapterBase;
  * @GeocoderProvider(
  *   id = "tomtom",
  *   name = "TomTom",
- *   handler = "\Geocoder\Provider\TomTom",
+ *   handler = "\Geocoder\Provider\TomTom\TomTom",
  *   arguments = {
- *     "apikey" = NULL,
- *     "locale" = NULL
+ *     "apiKey" = ""
  *   }
  * )
  */

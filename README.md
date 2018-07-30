@@ -36,8 +36,10 @@ This is a complete rewrite of the Geocoder module, based on the
 * Download the module running the following shell command from your project root
   (at the composer.json file level):
   ```$ composer require drupal/geocoder```
-  **Note:** this will also download the Geocoder PHP library as
-  vendor/willdurand/geocoder
+* Choose the [Geocoder Provider](https://packagist.org/providers/geocoder-php/provider-implementation)
+  you want to use and also add it as a required dependency to your project. For
+  example if you want to use Google Maps as your provider:
+  ```$ composer require geocoder-php/google-maps-provider```
 * Enable the module via [Drush](http://drush.org)  
  ```$ drush en geocoder```
  or the website back-end/administration interface;

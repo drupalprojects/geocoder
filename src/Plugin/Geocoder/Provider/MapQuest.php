@@ -10,9 +10,9 @@ use Drupal\geocoder\ProviderUsingHandlerWithAdapterBase;
  * @GeocoderProvider(
  *   id = "mapquest",
  *   name = "MapQuest",
- *   handler = "\Geocoder\Provider\MapQuest",
+ *   handler = "\Geocoder\Provider\MapQuest\MapQuest",
  *   arguments = {
- *     "apikey" = NULL,
+ *     "apiKey" = "",
  *     "licensed" = FALSE
  *   }
  * )
