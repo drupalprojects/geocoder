@@ -220,7 +220,7 @@ function geocoder_field_entity_presave(EntityInterface $entity) {
           default:
         }
 
-        if ($address_collection) {
+        if ($address_collection && !$address_collection->isEmpty()) {
           switch ($geocoder['delta_handling']) {
             // Single-to-multiple handling - if we can, explode out the
             // component geometries.

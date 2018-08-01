@@ -32,13 +32,14 @@ class Geocoder implements GeocoderInterface {
   public function geocode($data, array $plugins, array $options = []) {
     foreach ($plugins as $plugin_id) {
       $options += [$plugin_id => []];
-      $provider = $this->providerPluginManager->createInstance($plugin_id, $options[$plugin_id]);
-
       try {
-        return $provider->geocode($data);
-      }
-      catch (InvalidCredentials $e) {
-        static::log($e->getMessage());
+        $provider = $this->providerPluginManager->createInstance($plugin_id, $options[$plugin_id]);
+        try {
+          return $provider->geocode($data);
+        }
+        catch (InvalidCredentials $e) {
+          static::log($e->getMessage());
+        }
       }
       catch (\Exception $e) {
         static::log($e->getMessage());
@@ -54,13 +55,14 @@ class Geocoder implements GeocoderInterface {
   public function reverse($latitude, $longitude, array $plugins, array $options = []) {
     foreach ($plugins as $plugin_id) {
       $options += [$plugin_id => []];
-      $provider = $this->providerPluginManager->createInstance($plugin_id, $options[$plugin_id]);
-
       try {
-        return $provider->reverse($latitude, $longitude);
-      }
-      catch (InvalidCredentials $e) {
-        static::log($e->getMessage());
+        $provider = $this->providerPluginManager->createInstance($plugin_id, $options[$plugin_id]);
+        try {
+          return $provider->reverse($latitude, $longitude);
+        }
+        catch (InvalidCredentials $e) {
+          static::log($e->getMessage());
+        }
       }
       catch (\Exception $e) {
         static::log($e->getMessage());
