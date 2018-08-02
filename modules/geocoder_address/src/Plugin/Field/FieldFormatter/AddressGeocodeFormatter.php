@@ -37,9 +37,9 @@ class AddressGeocodeFormatter extends GeocodeFormatter {
       $address[] = !empty($value['locality']) ? $value['locality'] : NULL;
       $address[] = !empty($value['country']) ? $value['country'] : NULL;
 
-      if ($addressCollection = $this->geocoder->geocode(implode(' ', array_filter($address)), array_keys($provider_plugins), $geocoder_plugins_options)) {
+      if ($address_collection = $this->geocoder->geocode(implode(' ', array_filter($address)), array_keys($provider_plugins), $geocoder_plugins_options)) {
         $elements[$delta] = [
-          '#plain_text' => $dumper->dump($addressCollection->first()),
+          '#markup' => $address_collection instanceof AddressCollection && !$address_collection->isEmpty() ? $dumper->dump($address_collection->first()) : "",
         ];
       }
     }

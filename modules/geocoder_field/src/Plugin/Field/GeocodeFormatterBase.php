@@ -14,6 +14,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\Utility\LinkGeneratorInterface;
+use Geocoder\Model\AddressCollection;
 
 /**
  * Base Plugin implementation of the Geocode formatter.
@@ -222,7 +223,7 @@ abstract class GeocodeFormatterBase extends FormatterBase implements ContainerFa
     foreach ($items as $delta => $item) {
       if ($address_collection = $this->geocoder->geocode($item->value, array_keys($provider_plugins), $geocoder_plugins_options)) {
         $elements[$delta] = [
-          '#plain_text' => $dumper->dump($address_collection->first()),
+          '#markup' => $address_collection instanceof AddressCollection && !$address_collection->isEmpty() ? $dumper->dump($address_collection->first()) : "",
         ];
       }
     }

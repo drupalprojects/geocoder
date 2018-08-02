@@ -39,7 +39,7 @@ class ReverseGeocodeGeofieldFormatter extends GeocodeFormatterBase {
 
       if ($address_collection = $this->geocoder->reverse($centroid->y(), $centroid->x(), array_keys($provider_plugins), $geocoder_plugins_options)) {
         $elements[$delta] = [
-          '#markup' => $dumper->dump($address_collection->first()),
+          '#markup' => $address_collection instanceof AddressCollection && !$address_collection->isEmpty() ? $dumper->dump($address_collection->first()) : "",
         ];
       }
     }
