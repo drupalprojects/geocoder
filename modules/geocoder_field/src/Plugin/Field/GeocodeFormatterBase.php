@@ -238,7 +238,7 @@ abstract class GeocodeFormatterBase extends FormatterBase implements ContainerFa
    *   Provider plugin IDs and their properties (id, name, arguments...).
    */
   public function getEnabledProviderPlugins() {
-    $geocoder_plugins = $this->providerPluginManager->getInstalledPlugins();
+    $geocoder_plugins = $this->providerPluginManager->getPlugins();
     $plugins_settings = $this->getSetting('plugins');
 
     // Filter out unchecked plugins.

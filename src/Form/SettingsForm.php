@@ -142,8 +142,9 @@ class SettingsForm extends ConfigFormBase {
     $form['geocoder_plugins_title'] = [
       '#type' => 'item',
       '#title' => t('Geocoder plugin(s) Options'),
-      '#description' => t('Set the Options to be used on your plugins. As a good help it is possible to refer to the requirements listed in the @geocoder_php_library_link documentation.', [
+      '#description' => t('Set the Options to be used on your plugins. As a good help it is possible to refer to the requirements listed in the @geocoder_php_library_link documentation.<br>If the provider of your choice does not appear here under look in the @providers_link (you might install/add it using Composer).', [
         '@geocoder_php_library_link' => $geocoder_php_library_link,
+        '@providers_link' => $this->providerPluginManager->providersLink,
       ]),
     ];
 
@@ -162,7 +163,7 @@ class SettingsForm extends ConfigFormBase {
     ];
 
     $rows = [];
-    foreach ($this->providerPluginManager->getInstalledPlugins() as $plugin) {
+    foreach ($this->providerPluginManager->getPlugins() as $plugin) {
       $plugin_config_schema = [];
 
       if ($this->typedConfigManager->hasConfigSchema('geocoder.settings.plugins.' . $plugin['id'])) {
