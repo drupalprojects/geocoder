@@ -80,7 +80,7 @@ class ProviderPluginManager extends GeocoderPluginManagerBase {
   }
 
   /**
-   * Return the array of plugins and their settings if any.
+   * Return the array of all defined plugins and their settings if any.
    *
    * @return array
    *   A list of plugins with their settings.
@@ -99,6 +99,19 @@ class ProviderPluginManager extends GeocoderPluginManagerBase {
     ksort($definitions);
 
     return $definitions;
+  }
+
+  /**
+   * Return the array of all working plugins.
+   *
+   * @return array
+   *   A list of plugins matching the installed geocoder-php providers.
+   */
+  public function getInstalledPlugins() {
+    return array_filter($this->getPlugins(), function (array $plugin) {
+      // Only show providers that are installed.
+      return empty($plugin['handler']) || class_exists($plugin['handler']);
+    });
   }
 
   /**
@@ -166,7 +179,7 @@ class ProviderPluginManager extends GeocoderPluginManagerBase {
 
     // Reorder the plugins promoting the default ones in the proper order.
     $plugins = array_combine($enabled_plugins, $enabled_plugins);
-    foreach ($this->getPlugins() as $plugin) {
+    foreach ($this->getInstalledPlugins() as $plugin) {
       // Non-default values are appended at the end.
       $plugins[$plugin['id']] = $plugin;
     }

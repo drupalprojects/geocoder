@@ -162,12 +162,7 @@ class SettingsForm extends ConfigFormBase {
     ];
 
     $rows = [];
-    foreach ($this->providerPluginManager->getPlugins() as $plugin) {
-      // Only show providers that are installed.
-      if (!empty($plugin['handler']) && !class_exists($plugin['handler'])) {
-        continue;
-      }
-
+    foreach ($this->providerPluginManager->getInstalledPlugins() as $plugin) {
       $plugin_config_schema = [];
 
       if ($this->typedConfigManager->hasConfigSchema('geocoder.settings.plugins.' . $plugin['id'])) {
