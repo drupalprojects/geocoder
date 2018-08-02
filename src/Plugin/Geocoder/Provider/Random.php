@@ -5,6 +5,7 @@ namespace Drupal\geocoder\Plugin\Geocoder\Provider;
 use Drupal\Core\Locale\CountryManager;
 use Drupal\geocoder\ProviderBase;
 use Geocoder\Model\Address;
+use Geocoder\Model\AddressCollection;
 use Geocoder\Model\AdminLevelCollection;
 
 /**
@@ -35,7 +36,11 @@ class Random extends ProviderBase {
    * {@inheritdoc}
    */
   protected function doGeocode($source) {
-    return $this->getAddressFactory()->createFromArray([$this->getRandomResult()]);
+    return new AddressCollection(
+      [
+        $this->getAddressFactory()->createFromArray($this->getRandomResult())
+      ]
+    );
   }
 
   /**
@@ -46,7 +51,11 @@ class Random extends ProviderBase {
     $result['latitude'] = $latitude;
     $result['longitude'] = $longitude;
 
-    return $this->getAddressFactory()->createFromArray([$result]);
+    return new AddressCollection(
+      [
+        $this->getAddressFactory()->createFromArray($result)
+      ]
+    );
   }
 
   /**
@@ -102,10 +111,10 @@ class Random extends ProviderBase {
       'latitude' => mt_rand(0, 90) + mt_rand() / mt_getrandmax(),
       'longitude' => mt_rand(-180, 180) + mt_rand() / mt_getrandmax(),
       'streetName' => $this->getRandomCountryInfo('name') . ' ' . $streetTypes[mt_rand(0, count($streetTypes) - 1)],
-      'streetNumber' => mt_rand(1, 1000),
-      'postalCode' => mt_rand(1, 1000),
+      'streetNumber' => (string) mt_rand(1, 1000),
+      'postalCode' => (string) mt_rand(1, 1000),
       'locality' => sha1(mt_rand() / mt_getrandmax()),
-      'country' => $country['name'],
+      'country' => (string) $country['name'],
       'countryCode' => $country['code'],
     ];
   }
@@ -120,6 +129,7 @@ class Random extends ProviderBase {
     if (!isset($this->addressFactory)) {
       $this->addressFactory = new Address('', new AdminLevelCollection());
     }
+
     return $this->addressFactory;
   }
 
@@ -133,6 +143,7 @@ class Random extends ProviderBase {
     if (!isset($this->moduleHandler)) {
       $this->moduleHandler = \Drupal::moduleHandler();
     }
+
     return $this->moduleHandler;
   }
 
