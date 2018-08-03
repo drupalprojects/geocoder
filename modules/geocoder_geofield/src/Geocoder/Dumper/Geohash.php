@@ -27,8 +27,7 @@ class Geohash extends Geometry implements Dumper {
   /**
    * {@inheritdoc}
    */
-  public function dump(Location $location) {
-    throw new \Exception('Update ' . __METHOD__);
+  public function dump(Location $address) {
     return parent::dump($address)->out('geohash');
   }
 
